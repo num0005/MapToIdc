@@ -21,6 +21,19 @@ namespace MapToIdc
             }
 
             Console.WriteLine();
+            
+            int base_addr = 0;
+            while (base_addr == 0)
+            {
+                Console.WriteLine("Enter base address:");
+                int base;
+                if(Int32.TryParse(Console.ReadLine(), out base))
+                {
+                    base_addr = base;
+                }
+            }
+            
+            Console.WriteLine();
 
             FileInfo idcFile = null;
 
@@ -32,6 +45,7 @@ namespace MapToIdc
                 if (idcPath.EndsWith(".idc"))
                     idcFile = new FileInfo(idcPath);
             }
+            
 
             Console.WriteLine();
             Console.Write("Creating names...");
@@ -67,7 +81,7 @@ namespace MapToIdc
                     if (tokens.Count < 4 || !tokens.First().Contains(':') || !(tokens.Last().Contains(".obj") || tokens.Last().Contains(".exe") || tokens.Last().Contains(".xex")))
                         continue;
 
-                    var address = Convert.ToInt32($"0x{tokens[2].Split(':').Last()}", 16);
+                    var address = base_addr + Convert.ToInt32($"0x{tokens[0].Split(':').Last()}", 16);
                     var name = tokens[1];
                     var comment = tokens.Count > 3 ? $" // {tokens[3]}" : "";
 
